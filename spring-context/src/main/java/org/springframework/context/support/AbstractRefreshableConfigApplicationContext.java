@@ -39,6 +39,9 @@ import org.springframework.util.StringUtils;
 public abstract class AbstractRefreshableConfigApplicationContext extends AbstractRefreshableApplicationContext
 		implements BeanNameAware, InitializingBean {
 
+	/**
+	 * 资源位置数组
+	 */
 	@Nullable
 	private String[] configLocations;
 
@@ -76,7 +79,9 @@ public abstract class AbstractRefreshableConfigApplicationContext extends Abstra
 	public void setConfigLocations(@Nullable String... locations) {
 		if (locations != null) {
 			Assert.noNullElements(locations, "Config locations must not be null");
+			//根据locations大小初始化资源位置数组
 			this.configLocations = new String[locations.length];
+			//解析资源文件路径放入资源位置数组中
 			for (int i = 0; i < locations.length; i++) {
 				this.configLocations[i] = resolvePath(locations[i]).trim();
 			}
@@ -115,6 +120,8 @@ public abstract class AbstractRefreshableConfigApplicationContext extends Abstra
 	}
 
 	/**
+	 * 解析给定路径，必要时用相应的环境属性值替换占位符。应用于配置位置。
+	 * <p>
 	 * Resolve the given path, replacing placeholders with corresponding
 	 * environment property values if necessary. Applied to config locations.
 	 * @param path the original file path

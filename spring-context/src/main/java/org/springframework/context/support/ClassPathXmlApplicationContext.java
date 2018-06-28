@@ -24,6 +24,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * 独立XML应用程序上下文,从类路径中获取上下文定义文件,把普通的路径视为包含包路径的资源名.
+ * 对于jars包的测试应用上下文很有用
+ * <p>
  * Standalone XML application context, taking the context definition files
  * from the class path, interpreting plain paths as class path resource names
  * that include the package path (e.g. "mypackage/myresource.txt"). Useful for
@@ -139,6 +142,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 			throws BeansException {
 
 		super(parent);
+		//解析资源路径并存放资源文件路径，此操作可能会对路径中的占位符进行替换操作
 		setConfigLocations(configLocations);
 		if (refresh) {
 			refresh();
