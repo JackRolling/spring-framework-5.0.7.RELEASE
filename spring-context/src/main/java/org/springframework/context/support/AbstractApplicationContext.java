@@ -301,8 +301,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
+	 * 以可配置的形式返回此应用程序上下文的{@code Environment}，允许进一步自定义
+	 * <p>
 	 * Return the {@code Environment} for this application context in configurable
 	 * form, allowing for further customization.
+	 * 如果没有指定，默认环境将被初始化
+	 * <p>
 	 * <p>If none specified, a default environment will be initialized via
 	 * {@link #createEnvironment()}.
 	 */
@@ -315,6 +319,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
+	 * 创建并返回一个新的{@link StandardEnvironment}实例
+	 * <p>
 	 * Create and return a new {@link StandardEnvironment}.
 	 * <p>Subclasses may override this method in order to supply
 	 * a custom {@link ConfigurableEnvironment} implementation.

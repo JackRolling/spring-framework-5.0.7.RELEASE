@@ -17,9 +17,17 @@
 package org.springframework.core.env;
 
 /**
+ * {@link Environment} 适用于“标准”（即非Web）的实现
+ * <p>
  * {@link Environment} implementation suitable for use in 'standard' (i.e. non-web)
  * applications.
- *
+ * 除了{@link ConfigurableEnvironment}的一般功能（如属性解析和配置文件相关操作）之外，
+ * 此实现还配置两个默认属性源，按以下顺序进行搜索:
+ * <ul>
+ * <li>{@linkplain AbstractEnvironment#getSystemProperties() system properties}
+ * <li>{@linkplain AbstractEnvironment#getSystemEnvironment() system environment variables}
+ * </ul>
+ * <p>
  * <p>In addition to the usual functions of a {@link ConfigurableEnvironment} such as
  * property resolution and profile-related operations, this implementation configures two
  * default property sources, to be searched in the following order:
@@ -27,7 +35,12 @@ package org.springframework.core.env;
  * <li>{@linkplain AbstractEnvironment#getSystemProperties() system properties}
  * <li>{@linkplain AbstractEnvironment#getSystemEnvironment() system environment variables}
  * </ul>
- *
+ * 也就是说，如果键“XYZ”既存在于JVM系统属性中，
+ * 也存在于当前进程的环境变量集合中，
+ * 则来自系统属性的键XYZ的值将从调用返回到{@code environment.getProperty("xyz")}。
+ * 默认情况下选择此排序，因为系统属性是每个JVM，而环境变量在给定系统上的许多JVM上可能相同。
+ * 赋予系统属性优先权允许在每个JVM基础上重写环境变量
+ * <p>
  * That is, if the key "xyz" is present both in the JVM system properties as well as in
  * the set of environment variables for the current process, the value of key "xyz" from
  * system properties will return from a call to {@code environment.getProperty("xyz")}.
@@ -35,12 +48,18 @@ package org.springframework.core.env;
  * environment variables may be the same across many JVMs on a given system.  Giving
  * system properties precedence allows for overriding of environment variables on a
  * per-JVM basis.
- *
+ * <p>
+ * 这些缺省属性源可以被删除、重新排序或替换；
+ * 另外，可以使用{@link MutablePropertySources}实例从{@link #getPropertySources()}中添加附加属性源。
+ * 参阅{@link ConfigurableEnvironment} JavaDoc以供使用示例
+ * 
  * <p>These default property sources may be removed, reordered, or replaced; and
  * additional property sources may be added using the {@link MutablePropertySources}
  * instance available from {@link #getPropertySources()}. See
  * {@link ConfigurableEnvironment} Javadoc for usage examples.
- *
+ * <p>
+ * 有关在变量名中禁用周期字符的shell环境（例如BASH）中的属性名称的特殊处理，请参阅{@link SystemEnvironmentPropertySource} JavaDoc
+ * 
  * <p>See {@link SystemEnvironmentPropertySource} javadoc for details on special handling
  * of property names in shell environments (e.g. Bash) that disallow period characters in
  * variable names.
