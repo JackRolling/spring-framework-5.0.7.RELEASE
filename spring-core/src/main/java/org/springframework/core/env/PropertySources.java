@@ -19,6 +19,8 @@ package org.springframework.core.env;
 import org.springframework.lang.Nullable;
 
 /**
+ * 保持器包含一个或多个{@link PropertySource}对象。
+ * <p>
  * Holder containing one or more {@link PropertySource} objects.
  *
  * @author Chris Beams
@@ -27,12 +29,16 @@ import org.springframework.lang.Nullable;
 public interface PropertySources extends Iterable<PropertySource<?>> {
 
 	/**
+	 * 返回包含给定名称的属性源是否包含。
+	 * <p>
 	 * Return whether a property source with the given name is contained.
 	 * @param name the {@linkplain PropertySource#getName() name of the property source} to find
 	 */
 	boolean contains(String name);
 
 	/**
+	 * 如果没有找到，返回具有给定名称的属性源{@code null}。
+	 * <p>
 	 * Return the property source with the given name, {@code null} if not found.
 	 * @param name the {@linkplain PropertySource#getName() name of the property source} to find
 	 */

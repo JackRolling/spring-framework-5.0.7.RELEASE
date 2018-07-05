@@ -24,24 +24,45 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 抽象基类表示名称/值属性对的来源。
+ * 下面的{@linkplain #getSource()源对象}可以是封装属性的任何类型{@code T}。
+ * 实例包括{@link java.util.Properties}对象，
+ * {@link java.util.Map}对象，
+ * {@code ServletContext}和{@code ServletConfig}对象（用于访问init参数）。
+ * 探索{@code PropertySource}类型层次结构，以查看所提供的实现。
+ * <p>
  * Abstract base class representing a source of name/value property pairs. The underlying
  * {@linkplain #getSource() source object} may be of any type {@code T} that encapsulates
  * properties. Examples include {@link java.util.Properties} objects, {@link java.util.Map}
  * objects, {@code ServletContext} and {@code ServletConfig} objects (for access to init
  * parameters). Explore the {@code PropertySource} type hierarchy to see provided
  * implementations.
- *
+ * <p>
+ * {@code PropertySource}对象通常不是孤立地使用的，而是通过{@link PropertySources}对象，
+ * 它聚集属性源并与{@link PropertyResolver}一起实现，
+ * 该实现可以在代码属性集上执行基于优先级的搜索。{@code PropertySources}
  * <p>{@code PropertySource} objects are not typically used in isolation, but rather
  * through a {@link PropertySources} object, which aggregates property sources and in
  * conjunction with a {@link PropertyResolver} implementation that can perform
  * precedence-based searches across the set of {@code PropertySources}.
- *
+ * 
+ * <p>
+ * {@code PropertySource}标识不是基于封装属性的内容来确定的，
+ * 而是基于{@code PropertySource}的{@link #getName() name}来确定的。
+ * 这对于在集合上下文中操作{@code PropertySource}对象非常有用。
+ * 有关详细信息，请参阅{@link MutablePropertySources}中的操作
+ * 以及{@link #named(String)}和{@link #toString()}方法。
  * <p>{@code PropertySource} identity is determined not based on the content of
  * encapsulated properties, but rather based on the {@link #getName() name} of the
  * {@code PropertySource} alone. This is useful for manipulating {@code PropertySource}
  * objects when in collection contexts. See operations in {@link MutablePropertySources}
  * as well as the {@link #named(String)} and {@link #toString()} methods for details.
  *
+ * <p>
+ * 注意：当与工作@{@link
+ * org.springframework.context.annotation.Configuration Configuration}，
+ * 这类链接配置@{@link org.springframework.context.annotation.PropertySource PropertySource}
+ * 注释链接方式提供方便和声明的源添加到 {@code Environment}.
  * <p>Note that when working with @{@link
  * org.springframework.context.annotation.Configuration Configuration} classes that
  * the @{@link org.springframework.context.annotation.PropertySource PropertySource}
@@ -66,6 +87,8 @@ public abstract class PropertySource<T> {
 
 
 	/**
+	 * 用给定的名称{@code PropertySource}和源对象创建一个新的
+	 * <p>
 	 * Create a new {@code PropertySource} with the given name and source object.
 	 */
 	public PropertySource(String name, T source) {
@@ -76,6 +99,8 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * 用给定名称创建一个新的{@code PropertySource}，并用一个新的{@code Object}实例作为基础源。
+	 * <p>
 	 * Create a new {@code PropertySource} with the given name and with a new
 	 * {@code Object} instance as the underlying source.
 	 * <p>Often useful in testing scenarios when creating anonymous implementations
@@ -88,6 +113,8 @@ public abstract class PropertySource<T> {
 
 
 	/**
+	 * 返回这个名称{@code PropertySource}
+	 * <p>
 	 * Return the name of this {@code PropertySource}
 	 */
 	public String getName() {
@@ -95,6 +122,8 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * 为此返回基本源对象{@code PropertySource}.
+	 * <p>
 	 * Return the underlying source object for this {@code PropertySource}.
 	 */
 	public T getSource() {
@@ -102,6 +131,8 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * 无论是否{@code PropertySource}包含给定的属性名都要返回
+	 * <p>
 	 * Return whether this {@code PropertySource} contains the given name.
 	 * <p>This implementation simply checks for a {@code null} return value
 	 * from {@link #getProperty(String)}. Subclasses may wish to implement
@@ -113,6 +144,8 @@ public abstract class PropertySource<T> {
 	}
 
 	/**
+	 * 如果没找到则返回null，否则返回与给定名称关联的值
+	 * <p>
 	 * Return the value associated with the given name,
 	 * or {@code null} if not found.
 	 * @param name the property to find
